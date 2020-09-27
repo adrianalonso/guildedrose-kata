@@ -29,4 +29,19 @@ class Item
     {
         $this->quality--;
     }
+
+    public function isAgedBrie()
+    {
+        return $this->name === 'Aged Brie';
+    }
+
+    public function isBackstage()
+    {
+        return $this->name === 'Backstage passes to a TAFKAL80ETC concert';
+    }
+
+    public function isSulfuras()
+    {
+        return $this->name === 'Sulfuras, Hand of Ragnaros';
+    }
 }
