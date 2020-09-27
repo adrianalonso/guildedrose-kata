@@ -18,13 +18,15 @@ class GildedRose
     {
         /** @var Item $item */
         foreach ($this->items as $item) {
-            if (!$item->isAgedBrie() && !$item->isBackstage()) {
-                if ($item->quality > MIN_QUALITY && !$item->isSulfuras()) {
+            if ($item->isOrdinaryItem()) {
+                if ($item->quality > MIN_QUALITY) {
                     $item->decrementQuality();
                 }
-            } else {
+            }
+
+            if ($item->isAgedBrie() || $item->isBackstage()) {
                 if ($item->quality < MAX_QUALITY) {
-                    $item->quality = $item->quality + 1;
+                    $item->incrementQuality();
                     if ($item->isBackstage()) {
                         if ($item->sell_in < 11 && $item->quality < MAX_QUALITY) {
                             $item->incrementQuality();
@@ -37,10 +39,10 @@ class GildedRose
             }
 
             if (!$item->isSulfuras()) {
-                $item->sell_in = $item->sell_in - 1;
+                $item->decrementSellin();
             }
 
-            if ($item->sell_in < 0) {
+            if ($item->isSellinLessThanZero()) {
                 if (!$item->isAgedBrie()) {
                     if (!$item->isBackstage()) {
                         if ($item->quality > 0 && !$item->isSulfuras()) {
@@ -49,10 +51,10 @@ class GildedRose
                     } else {
                         $item->quality = $item->quality - $item->quality;
                     }
-                } else {
-                    if ($item->quality < MAX_QUALITY) {
-                        $item->incrementQuality();
-                    }
+                }
+
+                if ($item->isAgedBrie() && $item->quality < MAX_QUALITY) {
+                    $item->incrementQuality();
                 }
             }
         }

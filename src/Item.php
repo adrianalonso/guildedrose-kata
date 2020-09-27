@@ -44,4 +44,19 @@ class Item
     {
         return $this->name === 'Sulfuras, Hand of Ragnaros';
     }
+
+    public function isOrdinaryItem()
+    {
+        return !$this->isAgedBrie() && !$this->isSulfuras() && !$this->isBackstage();
+    }
+
+    public function decrementSellin()
+    {
+        $this->sell_in--;
+    }
+
+    public function isSellinLessThanZero()
+    {
+        return $this->sell_in < 0;
+    }
 }
