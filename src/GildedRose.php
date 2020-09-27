@@ -2,6 +2,10 @@
 
 namespace Runroom\GildedRose;
 
+/**
+ * Class GildedRose
+ * @package Runroom\GildedRose
+ */
 class GildedRose
 {
     /**
@@ -10,32 +14,27 @@ class GildedRose
     private $items;
 
     /**
+     * @var StrategyFactory
+     */
+    private $factory;
+
+    /**
      * GildedRose constructor.
      * @param Item[] $items
      */
     public function __construct($items)
     {
         $this->items = $items;
+        $this->factory = new StrategyFactory();
     }
 
     public function update_quality(): void
     {
         /** @var Item $item */
         foreach ($this->items as $item) {
-            $strategy = null;
-            if ($item->isOrdinaryItem()) {
-                $strategy = new OrdinaryStrategy($item);
-            }
+            $strategy = $this->factory->buildStrategy($item);
 
-            if ($item->isAgedBrie()) {
-                $strategy = new AgedBrieStrategy($item);
-            }
-
-            if ($item->isBackstage()) {
-                $strategy = new BackstageStrategy($item);
-            }
-
-            if ($strategy) {
+            if (null !== $strategy) {
                 $strategy->updateQuality();
             }
         }
