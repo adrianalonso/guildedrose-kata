@@ -27,14 +27,15 @@ class GildedRose
             if ($item->isAgedBrie() || $item->isBackstage()) {
                 if ($item->quality < MAX_QUALITY) {
                     $item->incrementQuality();
-                    if ($item->isBackstage()) {
-                        if ($item->sell_in < 11 && $item->quality < MAX_QUALITY) {
-                            $item->incrementQuality();
-                        }
-                        if ($item->sell_in < 6 && $item->quality < MAX_QUALITY) {
-                            $item->incrementQuality();
-                        }
-                    }
+                }
+            }
+
+            if ($item->isBackstage()) {
+                if ($item->sell_in < 11 && $item->quality < MAX_QUALITY) {
+                    $item->incrementQuality();
+                }
+                if ($item->sell_in < 6 && $item->quality < MAX_QUALITY) {
+                    $item->incrementQuality();
                 }
             }
 
@@ -43,15 +44,14 @@ class GildedRose
             }
 
             if ($item->isSellinLessThanZero()) {
-                if (!$item->isAgedBrie()) {
-                    if (!$item->isBackstage()) {
-                        if ($item->quality > 0 && !$item->isSulfuras()) {
-                            $item->decrementQuality();
-                        }
-                    } else {
-                        $item->quality = $item->quality - $item->quality;
-                    }
+                if ($item->isBackstage()) {
+                    $item->quality = $item->quality - $item->quality;
                 }
+
+                if ($item->quality > 0 && $item->isOrdinaryItem()) {
+                    $item->decrementQuality();
+                }
+
 
                 if ($item->isAgedBrie() && $item->quality < MAX_QUALITY) {
                     $item->incrementQuality();
