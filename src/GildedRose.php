@@ -2,20 +2,24 @@
 
 namespace Runroom\GildedRose;
 
-class GildedRose {
-
+class GildedRose
+{
     private $items;
 
-    function __construct($items) {
+    public function __construct($items)
+    {
         $this->items = $items;
     }
 
-    function update_quality() {
+    public function update_quality()
+    {
+
+        /** @var Item $item */
         foreach ($this->items as $item) {
             if ($item->name != 'Aged Brie' and $item->name != 'Backstage passes to a TAFKAL80ETC concert') {
                 if ($item->quality > 0) {
                     if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                        $item->quality = $item->quality - 1;
+                        $item->decrementQuality();
                     }
                 }
             } else {
@@ -24,12 +28,12 @@ class GildedRose {
                     if ($item->name == 'Backstage passes to a TAFKAL80ETC concert') {
                         if ($item->sell_in < 11) {
                             if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
+                                $item->incrementQuality();
                             }
                         }
                         if ($item->sell_in < 6) {
                             if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
+                                $item->incrementQuality();
                             }
                         }
                     }
@@ -45,7 +49,7 @@ class GildedRose {
                     if ($item->name != 'Backstage passes to a TAFKAL80ETC concert') {
                         if ($item->quality > 0) {
                             if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                                $item->quality = $item->quality - 1;
+                                $item->decrementQuality();
                             }
                         }
                     } else {
@@ -53,7 +57,7 @@ class GildedRose {
                     }
                 } else {
                     if ($item->quality < 50) {
-                        $item->quality = $item->quality + 1;
+                        $item->incrementQuality();
                     }
                 }
             }
