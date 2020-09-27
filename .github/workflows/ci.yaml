@@ -30,5 +30,11 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
 
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse src
+
+      - name: Run PSalm
+        run: ./vendor/bin/psalm src --show-info=true
+
       - name: Run tests
         run: ./vendor/bin/phpunit
