@@ -19,24 +19,18 @@ class GildedRose
         /** @var Item $item */
         foreach ($this->items as $item) {
             if (!$item->isAgedBrie() && !$item->isBackstage()) {
-                if ($item->quality > MIN_QUALITY) {
-                    if (!$item->isSulfuras()) {
-                        $item->decrementQuality();
-                    }
+                if ($item->quality > MIN_QUALITY && !$item->isSulfuras()) {
+                    $item->decrementQuality();
                 }
             } else {
                 if ($item->quality < MAX_QUALITY) {
                     $item->quality = $item->quality + 1;
                     if ($item->isBackstage()) {
-                        if ($item->sell_in < 11) {
-                            if ($item->quality < MAX_QUALITY) {
-                                $item->incrementQuality();
-                            }
+                        if ($item->sell_in < 11 && $item->quality < MAX_QUALITY) {
+                            $item->incrementQuality();
                         }
-                        if ($item->sell_in < 6) {
-                            if ($item->quality < MAX_QUALITY) {
-                                $item->incrementQuality();
-                            }
+                        if ($item->sell_in < 6 && $item->quality < MAX_QUALITY) {
+                            $item->incrementQuality();
                         }
                     }
                 }
@@ -49,10 +43,8 @@ class GildedRose
             if ($item->sell_in < 0) {
                 if (!$item->isAgedBrie()) {
                     if (!$item->isBackstage()) {
-                        if ($item->quality > 0) {
-                            if (!$item->isSulfuras()) {
-                                $item->decrementQuality();
-                            }
+                        if ($item->quality > 0 && !$item->isSulfuras()) {
+                            $item->decrementQuality();
                         }
                     } else {
                         $item->quality = $item->quality - $item->quality;
