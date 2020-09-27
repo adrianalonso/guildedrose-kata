@@ -2,6 +2,9 @@
 
 namespace Runroom\GildedRose;
 
+const MAX_QUALITY = 50;
+const MIN_QUALITY = 0;
+
 class GildedRose
 {
     private $items;
@@ -17,22 +20,22 @@ class GildedRose
         /** @var Item $item */
         foreach ($this->items as $item) {
             if ($item->name != 'Aged Brie' and $item->name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if ($item->quality > 0) {
+                if ($item->quality > MIN_QUALITY) {
                     if ($item->name != 'Sulfuras, Hand of Ragnaros') {
                         $item->decrementQuality();
                     }
                 }
             } else {
-                if ($item->quality < 50) {
+                if ($item->quality < MAX_QUALITY) {
                     $item->quality = $item->quality + 1;
                     if ($item->name == 'Backstage passes to a TAFKAL80ETC concert') {
                         if ($item->sell_in < 11) {
-                            if ($item->quality < 50) {
+                            if ($item->quality < MAX_QUALITY) {
                                 $item->incrementQuality();
                             }
                         }
                         if ($item->sell_in < 6) {
-                            if ($item->quality < 50) {
+                            if ($item->quality < MAX_QUALITY) {
                                 $item->incrementQuality();
                             }
                         }
@@ -56,7 +59,7 @@ class GildedRose
                         $item->quality = $item->quality - $item->quality;
                     }
                 } else {
-                    if ($item->quality < 50) {
+                    if ($item->quality < MAX_QUALITY) {
                         $item->incrementQuality();
                     }
                 }
