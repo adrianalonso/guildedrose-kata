@@ -16,39 +16,51 @@ class GildedRose
         /** @var Item $item */
         foreach ($this->items as $item) {
             if ($item->isOrdinaryItem()) {
-                $item->decrementQuality();
+                $this->handleOrdinaryItem($item);
             }
 
-            if ($item->isAgedBrie() || $item->isBackstage()) {
-                $item->incrementQuality();
+            if ($item->isAgedBrie()) {
+                $this->handleAgedBrie($item);
             }
 
             if ($item->isBackstage()) {
-                if ($item->sell_in < 11) {
-                    $item->incrementQuality();
-                }
-                if ($item->sell_in < 6) {
-                    $item->incrementQuality();
-                }
+                $this->handleBackstage($item);
             }
+        }
+    }
 
-            if (!$item->isSulfuras()) {
-                $item->decrementSellin();
-            }
+    private function handleOrdinaryItem(Item $item)
+    {
+        $item->decrementQuality();
+        $item->decrementSellin();
+        if ($item->isSellinLessThanZero()) {
+            $item->decrementQuality();
+        }
+    }
 
-            if ($item->isSellinLessThanZero()) {
-                if ($item->isBackstage()) {
-                    $item->quality = $item->quality - $item->quality;
-                }
+    private function handleAgedBrie(Item $item)
+    {
+        $item->incrementQuality();
+        $item->decrementSellin();
+        if ($item->isSellinLessThanZero()) {
+            $item->incrementQuality();
+        }
+    }
 
-                if ($item->isOrdinaryItem()) {
-                    $item->decrementQuality();
-                }
+    private function handleBackstage(Item $item)
+    {
+        $item->incrementQuality();
+        if ($item->sell_in < 11) {
+            $item->incrementQuality();
+        }
+        if ($item->sell_in < 6) {
+            $item->incrementQuality();
+        }
 
-                if ($item->isAgedBrie()) {
-                    $item->incrementQuality();
-                }
-            }
+        $item->decrementSellin();
+
+        if ($item->isSellinLessThanZero()) {
+            $item->quality = $item->quality - $item->quality;
         }
     }
 }
