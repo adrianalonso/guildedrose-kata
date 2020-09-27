@@ -4,63 +4,40 @@ namespace Runroom\GildedRose;
 
 class GildedRose
 {
+    /**
+     * @var Item[]
+     */
     private $items;
 
+    /**
+     * GildedRose constructor.
+     * @param Item[] $items
+     */
     public function __construct($items)
     {
         $this->items = $items;
     }
 
-    public function update_quality()
+    public function update_quality(): void
     {
         /** @var Item $item */
         foreach ($this->items as $item) {
+            $strategy = null;
             if ($item->isOrdinaryItem()) {
-                $this->handleOrdinaryItem($item);
+                $strategy = new OrdinaryStrategy($item);
             }
 
             if ($item->isAgedBrie()) {
-                $this->handleAgedBrie($item);
+                $strategy = new AgedBrieStrategy($item);
             }
 
             if ($item->isBackstage()) {
-                $this->handleBackstage($item);
+                $strategy = new BackstageStrategy($item);
             }
-        }
-    }
 
-    private function handleOrdinaryItem(Item $item)
-    {
-        $item->decrementQuality();
-        $item->decrementSellin();
-        if ($item->isSellinLessThanZero()) {
-            $item->decrementQuality();
-        }
-    }
-
-    private function handleAgedBrie(Item $item)
-    {
-        $item->incrementQuality();
-        $item->decrementSellin();
-        if ($item->isSellinLessThanZero()) {
-            $item->incrementQuality();
-        }
-    }
-
-    private function handleBackstage(Item $item)
-    {
-        $item->incrementQuality();
-        if ($item->sell_in < 11) {
-            $item->incrementQuality();
-        }
-        if ($item->sell_in < 6) {
-            $item->incrementQuality();
-        }
-
-        $item->decrementSellin();
-
-        if ($item->isSellinLessThanZero()) {
-            $item->quality = $item->quality - $item->quality;
+            if ($strategy) {
+                $strategy->updateQuality();
+            }
         }
     }
 }
