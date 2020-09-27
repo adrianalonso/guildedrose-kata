@@ -2,6 +2,10 @@
 
 namespace Runroom\GildedRose;
 
+const MAX_QUALITY = 50;
+const MIN_QUALITY = 0;
+
+
 class Item
 {
     public $name;
@@ -22,12 +26,16 @@ class Item
 
     public function incrementQuality()
     {
-        $this->quality++;
+        if ($this->quality < MAX_QUALITY) {
+            $this->quality++;
+        }
     }
 
     public function decrementQuality()
     {
-        $this->quality--;
+        if ($this->quality > MIN_QUALITY) {
+            $this->quality--;
+        }
     }
 
     public function isAgedBrie()
